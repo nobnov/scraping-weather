@@ -1,7 +1,7 @@
-import urllib.request
-from bs4 import BeautifulSoup
 import re
+import urllib.request
 
+from bs4 import BeautifulSoup
 
 url = urllib.request.urlopen('https://www.jma.go.jp/jp/week/315.html')
 soup = BeautifulSoup(url, 'lxml')
@@ -29,10 +29,13 @@ for maxtemp in max_temp:
     if '最高' not in maxtemp:
         maxtemp = maxtemp.replace('\n', '').replace('\t', '').replace('(', '{').replace(')', '}')
         maxtemp = re.sub('{.*?}', '', maxtemp)
+
         if '／' in maxtemp:
             maxtemp = None
+        else:
+            maxtemp = int(maxtemp)
 
-        maxtemplist.append(int(maxtemp))
+        maxtemplist.append(maxtemp)
 
 mintemplist = []
 for mintemp in min_temp:
@@ -41,10 +44,13 @@ for mintemp in min_temp:
     if '最低' not in mintemp:
         mintemp = mintemp.replace('\n', '').replace('\t', '').replace('(', '{').replace(')', '}')
         mintemp = re.sub('{.*?}', '', mintemp)
+
         if '／' in mintemp:
             mintemp = None
+        else:
+            mintemp = int(mintemp)
 
-        mintemplist.append(int(mintemp))
+        mintemplist.append(mintemp)
 
 weather.append(city)
 weather.append(weeklist)
